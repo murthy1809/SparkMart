@@ -14,12 +14,11 @@ GameObject:
   - component: {fileID: 920346165714133697}
   - component: {fileID: 4701229252781385884}
   - component: {fileID: 4800475556365785901}
-  - component: {fileID: 1393818654082624784}
-  - component: {fileID: 7708297411552352358}
-  - component: {fileID: 7199925096552932410}
-  - component: {fileID: 6760264042135690400}
   - component: {fileID: 767663508818487422}
   - component: {fileID: 712562727464024198}
+  - component: {fileID: 2299574628946620700}
+  - component: {fileID: 1393818654082624784}
+  - component: {fileID: 7708297411552352358}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -155,12 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8c822bb4431ba429ada1124deaa231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Customer
-  actions:
-  - {fileID: 1393818654082624784}
-  - {fileID: 7708297411552352358}
-  - {fileID: 7199925096552932410}
-  - {fileID: 6760264042135690400}
-  - {fileID: 712562727464024198}
+  actions: []
   currentAction: {fileID: 0}
   persona: {fileID: 11400000, guid: ce7940e37ed637d4aac0d9776692dc79, type: 2}
   shoppingListSize: 0
@@ -169,6 +163,79 @@ MonoBehaviour:
   currentSatisfaction: 0
   currentPatience: 0
   totalProfit: 0
+--- !u!114 &767663508818487422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37edd97b0a494a24991c3ec584f1e91c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToShelf
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions: []
+  afterEffects:
+  - key: atShelf
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &712562727464024198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d08f197e63818cb4391bdab6822663f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickUpItem
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions:
+  - key: atShelf
+    value: 1
+  afterEffects:
+  - key: hasItems
+    value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &2299574628946620700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807acd4f5dad09048b1906beb9e0fc9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToCheckout
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions:
+  - key: readyToCheckout
+    value: 1
+  afterEffects:
+  - key: inCheckoutQueue
+    value: 1
+  agent: {fileID: 0}
+  running: 0
 --- !u!114 &1393818654082624784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,8 +253,12 @@ MonoBehaviour:
   target: {fileID: 0}
   targetTag: 
   duration: 0
-  preConditions: []
-  afterEffects: []
+  preConditions:
+  - key: 'inCheckoutQueue '
+    value: 1
+  afterEffects:
+  - key: 'hasCheckedOut '
+    value: 1
   agent: {fileID: 0}
   running: 0
   baseCheckoutTime: 5
@@ -209,92 +280,12 @@ MonoBehaviour:
   target: {fileID: 0}
   targetTag: 
   duration: 0
-  preConditions: []
-  afterEffects: []
+  preConditions:
+  - key: 'hasCheckedOut '
+    value: 1
+  afterEffects:
+  - key: 'leftStore '
+    value: 1
   agent: {fileID: 0}
   running: 0
   exitTag: Exit
---- !u!114 &7199925096552932410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7002928554692032241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b0a9b11dedcf4e40ac1b72b195f9f54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GetCart
-  actionName: Action
-  cost: 1
-  target: {fileID: 0}
-  targetTag: 
-  duration: 0
-  preConditions: []
-  afterEffects: []
-  agent: {fileID: 0}
-  running: 0
---- !u!114 &6760264042135690400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7002928554692032241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807acd4f5dad09048b1906beb9e0fc9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoToCheckout
-  actionName: Action
-  cost: 1
-  target: {fileID: 0}
-  targetTag: 
-  duration: 0
-  preConditions: []
-  afterEffects: []
-  agent: {fileID: 0}
-  running: 0
---- !u!114 &767663508818487422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7002928554692032241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37edd97b0a494a24991c3ec584f1e91c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GoToShelf
-  actionName: Action
-  cost: 1
-  target: {fileID: 0}
-  targetTag: 
-  duration: 0
-  preConditions: []
-  afterEffects: []
-  agent: {fileID: 0}
-  running: 0
---- !u!114 &712562727464024198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7002928554692032241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d08f197e63818cb4391bdab6822663f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PickUpItem
-  actionName: Action
-  cost: 1
-  target: {fileID: 0}
-  targetTag: 
-  duration: 0
-  preConditions: []
-  afterEffects: []
-  agent: {fileID: 0}
-  running: 0

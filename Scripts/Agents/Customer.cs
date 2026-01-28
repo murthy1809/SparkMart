@@ -41,6 +41,7 @@ public class Customer : GAgent {
         SetupGoals();
     }
 
+
     void InitializeCustomer() {
         shoppingListSize = persona.GenerateShoppingListSize();
         GenerateShoppingList();
@@ -89,7 +90,15 @@ public class Customer : GAgent {
         goals.Add(homeGoal, 1);
     }
 
-    void Update() {
+    void Update()
+    {
+        Customer c = GetComponent<Customer>();
+        GAgent g = GetComponent<GAgent>();
+
+        Debug.Log($"Current Action: {g.currentAction?.actionName ?? "None"}");
+        Debug.Log($"Action Queue: {(g.currentAction != null ? "Has actions" : "Empty")}");
+        Debug.Log($"Beliefs: {string.Join(", ", g.beliefs.GetStates().Keys)}");
+ 
         if (currentPatience > 0) {
             currentPatience -= Time.deltaTime * persona.impatienceMultiplier;
 
