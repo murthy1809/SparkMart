@@ -4,30 +4,36 @@ public class GoToCheckout : GAction {
 
     private Customer customer;
 
+    void Start() {
+        actionName = "GoToCheckout";
+        
+        // Preconditions: done shopping
+        preconditions.Clear();
+        preconditions.Add("doneShopping", 1);
+        
+        // Effects: in checkout queue
+        effects.Clear();
+        effects.Add("inCheckoutQueue", 1);
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
-        if (!SparkWorld.Instance.GetWorld().HasState("StaffedCheckoutLane")) {
-            return false;
-        }
+        // For testing without employees, skip the staffed check
+        // if (!SparkWorld.Instance.GetWorld().HasState("StaffedCheckoutLane")) {
+        //     return false;
+        // }
 
         GameObject[] checkoutLanes = GameObject.FindGameObjectsWithTag("CheckoutLane");
-        GameObject targetLane = null;
-
-        foreach (GameObject lane in checkoutLanes) {
-            CheckoutLane checkoutComponent = lane.GetComponent<CheckoutLane>();
-            if (checkoutComponent != null && checkoutComponent.IsStaffed) {
-                targetLane = lane;
-                break;
-            }
-        }
-
-        if (targetLane == null) {
+        
+        if (checkoutLanes.Length == 0) {
+            Debug.LogWarning("No checkout lanes found!");
             return false;
         }
 
-        target = targetLane;
+        // Just go to first checkout lane for now
+        target = checkoutLanes[0];
         SparkWorld.Instance.GetQueue("customersInCheckoutQueue").AddResource(gameObject);
 
         return true;

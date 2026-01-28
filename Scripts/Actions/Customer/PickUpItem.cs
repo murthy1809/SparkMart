@@ -4,6 +4,18 @@ public class PickUpItem : GAction {
 
     private Customer customer;
 
+    void Start() {
+        actionName = "PickUpItem";
+        
+        // Preconditions: needs to be at shelf
+        preconditions.Clear();
+        preconditions.Add("atShelf", 1);
+        
+        // Effects: produces doneShopping (when list complete)
+        effects.Clear();
+        effects.Add("doneShopping", 1);
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;

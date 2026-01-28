@@ -5,6 +5,18 @@ public class GoToShelf : GAction {
     private Customer customer;
     private Shelf targetShelf;
 
+    void Start() {
+        // Set up action chain
+        actionName = "GoToShelf";
+        
+        // Effects: produces atShelf
+        effects.Clear();
+        effects.Add("atShelf", 1);
+        
+        // No preconditions
+        preconditions.Clear();
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;

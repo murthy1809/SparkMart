@@ -41,7 +41,6 @@ public class Customer : GAgent {
         SetupGoals();
     }
 
-
     void InitializeCustomer() {
         shoppingListSize = persona.GenerateShoppingListSize();
         GenerateShoppingList();
@@ -88,17 +87,16 @@ public class Customer : GAgent {
 
         SubGoal homeGoal = new SubGoal("leftStore", 1, true);
         goals.Add(homeGoal, 1);
+
+        // DEBUG
+        Debug.Log($"=== CUSTOMER GOALS SETUP ===");
+        Debug.Log($"Total goals: {goals.Count}");
+        foreach (var g in goals) {
+            Debug.Log($"  Goal: {string.Join(",", g.Key.sGoals.Keys)} Priority: {g.Value}");
+        }
     }
 
-    void Update()
-    {
-        Customer c = GetComponent<Customer>();
-        GAgent g = GetComponent<GAgent>();
-
-        Debug.Log($"Current Action: {g.currentAction?.actionName ?? "None"}");
-        Debug.Log($"Action Queue: {(g.currentAction != null ? "Has actions" : "Empty")}");
-        Debug.Log($"Beliefs: {string.Join(", ", g.beliefs.GetStates().Keys)}");
- 
+    void Update() {
         if (currentPatience > 0) {
             currentPatience -= Time.deltaTime * persona.impatienceMultiplier;
 

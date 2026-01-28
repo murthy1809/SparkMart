@@ -6,6 +6,18 @@ public class CustomerCheckout : GAction {
     public float baseCheckoutTime = 5f;
     public float timePerItem = 1f;
 
+    void Start() {
+        actionName = "CustomerCheckout";
+        
+        // Preconditions: in checkout queue
+        preconditions.Clear();
+        preconditions.Add("inCheckoutQueue", 1);
+        
+        // Effects: has checked out
+        effects.Clear();
+        effects.Add("hasCheckedOut", 1);
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;

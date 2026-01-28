@@ -4,6 +4,17 @@ public class GetCart : GAction {
 
     private Customer customer;
 
+    void Start() {
+        actionName = "GetCart";
+        
+        // No preconditions
+        preconditions.Clear();
+        
+        // Effects: has cart
+        effects.Clear();
+        effects.Add("hasCart", 1);
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;

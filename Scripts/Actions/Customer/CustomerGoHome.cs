@@ -5,6 +5,18 @@ public class CustomerGoHome : GAction {
     private Customer customer;
     public string exitTag = "Exit";
 
+    void Start() {
+        actionName = "CustomerGoHome";
+        
+        // Preconditions: has checked out
+        preconditions.Clear();
+        preconditions.Add("hasCheckedOut", 1);
+        
+        // Effects: left store
+        effects.Clear();
+        effects.Add("leftStore", 1);
+    }
+
     public override bool PrePerform() {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
