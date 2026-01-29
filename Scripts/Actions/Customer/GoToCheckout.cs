@@ -33,7 +33,7 @@ public class GoToCheckout : GAction {
         }
 
         // Just go to first checkout lane for now
-        target = checkoutLanes[0];
+        target = checkoutLanes[1];
         SparkWorld.Instance.GetQueue("customersInCheckoutQueue").AddResource(gameObject);
 
         return true;
