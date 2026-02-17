@@ -26,20 +26,28 @@ public class CustomerCheckout : GAction
 
     public override bool PostPerform()
     {
+        // Leave the physical queue
+        GoToCheckout goToCheckout = GetComponent<GoToCheckout>();
+        if (goToCheckout != null)
+        {
+            CheckoutQueueManager queue = goToCheckout.GetAssignedQueue();
+            if (queue != null)
+            {
+                queue.LeaveQueue(gameObject);
+            }
+        }
+
         SparkWorld.Instance.GetQueue("customersInCheckoutQueue").RemoveResource(gameObject);
         customer.CompleteCheckout();
-
         MetricsManager metrics = Object.FindObjectOfType<MetricsManager>();
         if (metrics != null)
         {
             metrics.RecordSale(customer.TotalProfit, customer.ItemsCollected);
             metrics.RecordCustomerSatisfaction(customer.Satisfaction);
         }
-
         beliefs.ModifyState("hasCheckedOut", 1);
         beliefs.RemoveState("inCheckoutQueue");
         beliefs.RemoveState("readyToCheckout");
-
         return true;
     }
 }

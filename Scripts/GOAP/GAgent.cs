@@ -139,6 +139,14 @@ public class GAgent : MonoBehaviour
                             destination = restockDest.position;
                         }
                     }
+                    else if (currentAction is GoToCheckout goToCheckout)
+                    {
+                        CheckoutQueueManager queue = goToCheckout.GetAssignedQueue();
+                        if (queue != null)
+                        {
+                            destination = queue.JoinQueue(gameObject);
+                        }
+                    }
                     else
                     {
                         Transform dest = currentAction.target.transform.Find("Destination");

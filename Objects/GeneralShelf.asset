@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShelfData
   shelfName: General Shelf
   shelfType: 0
-  minStock: 0
-  maxStock: 100
+  minStock: 20
+  maxStock: 40
   restockThreshold: 20
   initialStock: 4
   profitPerItem: 8

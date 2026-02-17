@@ -9,7 +9,7 @@ public class GoToCheckout : GAction
     [Header("Queue Threshold")]
     [Tooltip("Max customers in a lane's queue before this customer skips it")]
     public int maxQueueLength = 4;
-
+    private CheckoutQueueManager assignedQueue;
     void Start()
     {
         preconditions.Clear();
@@ -32,6 +32,7 @@ public class GoToCheckout : GAction
         }
 
         target = bestLane;
+        assignedQueue = bestLane.GetComponent<CheckoutQueueManager>();
 
         // Track this customer in the checkout queue
         SparkWorld.Instance.GetQueue("customersInCheckoutQueue").AddResource(gameObject);
@@ -162,5 +163,10 @@ public class GoToCheckout : GAction
         public float distance;
         public int queueLength;
         public bool isSelfCheckout;
+    }
+
+    public CheckoutQueueManager GetAssignedQueue()
+    {
+        return assignedQueue;
     }
 }
