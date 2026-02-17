@@ -1,36 +1,37 @@
 using UnityEngine;
 
-public class GetCart : GAction {
+public class GetCart : GAction
+{
 
     private Customer customer;
 
-    void Start() {
-        actionName = "GetCart";
-        
-        // No preconditions
+    void Start()
+    {
         preconditions.Clear();
-        
-        // Effects: has cart
         effects.Clear();
-        effects.Add("hasCart", 1);
+        effects["hasCart"] = 1;
     }
 
-    public override bool PrePerform() {
+    public override bool PrePerform()
+    {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
-        if (customer.HasCart) {
+        if (customer.HasCart)
+        {
             beliefs.ModifyState("hasCart", 1);
             return false;
         }
 
-        if (!SparkWorld.Instance.GetWorld().HasState("FreeCart")) {
+        if (!SparkWorld.Instance.GetWorld().HasState("FreeCart"))
+        {
             return false;
         }
 
         GameObject cart = SparkWorld.Instance.GetQueue("carts").RemoveResource();
 
-        if (cart == null) {
+        if (cart == null)
+        {
             return false;
         }
 
@@ -40,7 +41,8 @@ public class GetCart : GAction {
         return true;
     }
 
-    public override bool PostPerform() {
+    public override bool PostPerform()
+    {
         customer.AssignCart(target);
         inventory.AddItem(target);
         beliefs.ModifyState("hasCart", 1);

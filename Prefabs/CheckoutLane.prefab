@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3172180337510779588}
   - component: {fileID: 8800253041766177645}
   - component: {fileID: 741025934151058830}
-  - component: {fileID: 5372222750912434031}
   m_Layer: 0
   m_Name: Destination
   m_TagString: Untagged
@@ -50,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050409532255292437}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -112,22 +111,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5372222750912434031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050409532255292437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3072c525bb31c2f4086f61a2c31872a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CheckoutLane
-  laneNumber: 1
-  isSelfCheckout: 1
-  isStaffed: 0
-  assignedEmployee: {fileID: 0}
 --- !u!1 &1220435230304961297
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9199343085363713988}
+  - component: {fileID: 950431772081762850}
   m_Layer: 0
   m_Name: CheckoutLane
   m_TagString: CheckoutLane
@@ -385,6 +369,22 @@ Transform:
   - {fileID: 123827951877343162}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &950431772081762850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4886103251103275403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3072c525bb31c2f4086f61a2c31872a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckoutLane
+  laneNumber: 1
+  isSelfCheckout: 1
+  isStaffed: 0
+  assignedEmployee: {fileID: 0}
 --- !u!1 &8511420995288793861
 GameObject:
   m_ObjectHideFlags: 0

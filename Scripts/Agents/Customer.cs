@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Customer : GAgent {
+public class Customer : GAgent
+{
 
     [Header("Customer Configuration")]
     public CustomerPersona persona;
@@ -29,10 +30,12 @@ public class Customer : GAgent {
     public System.Action<Customer> OnCheckoutComplete;
     public System.Action<Customer> OnLeftStore;
 
-    public override void Start() {
+    public override void Start()
+    {
         base.Start();
 
-        if (persona == null) {
+        if (persona == null)
+        {
             Debug.LogError("Customer has no persona assigned!");
             return;
         }
@@ -41,7 +44,8 @@ public class Customer : GAgent {
         SetupGoals();
     }
 
-    void InitializeCustomer() {
+    void InitializeCustomer()
+    {
         shoppingListSize = persona.GenerateShoppingListSize();
         GenerateShoppingList();
 
@@ -51,30 +55,37 @@ public class Customer : GAgent {
         itemsInCart = 0;
         totalProfit = 0f;
 
-        if (currentAction != null && currentAction.agent != null) {
+        if (currentAction != null && currentAction.agent != null)
+        {
             currentAction.agent.speed = persona.moveSpeed;
         }
     }
 
-    void GenerateShoppingList() {
+    void GenerateShoppingList()
+    {
         shoppingList.Clear();
 
-        for (int i = 0; i < shoppingListSize; i++) {
+        for (int i = 0; i < shoppingListSize; i++)
+        {
             ShelfType type = (ShelfType)Random.Range(0, System.Enum.GetValues(typeof(ShelfType)).Length);
             shoppingList.Add(type);
         }
 
-        if (persona.browsesBehavior && shoppingListSize == 0) {
+        if (persona.browsesBehavior && shoppingListSize == 0)
+        {
             int browseItems = Random.Range(1, 4);
-            for (int i = 0; i < browseItems; i++) {
+            for (int i = 0; i < browseItems; i++)
+            {
                 ShelfType type = (ShelfType)Random.Range(0, System.Enum.GetValues(typeof(ShelfType)).Length);
                 shoppingList.Add(type);
             }
         }
     }
 
-    void SetupGoals() {
-        if (persona.requiresCart) {
+    void SetupGoals()
+    {
+        if (persona.requiresCart)
+        {
             SubGoal getCartGoal = new SubGoal("hasCart", 1, true);
             goals.Add(getCartGoal, 5);
         }
@@ -87,44 +98,45 @@ public class Customer : GAgent {
 
         SubGoal homeGoal = new SubGoal("leftStore", 1, true);
         goals.Add(homeGoal, 1);
-
-        // DEBUG
-        Debug.Log($"=== CUSTOMER GOALS SETUP ===");
-        Debug.Log($"Total goals: {goals.Count}");
-        foreach (var g in goals) {
-            Debug.Log($"  Goal: {string.Join(",", g.Key.sGoals.Keys)} Priority: {g.Value}");
-        }
     }
 
-    void Update() {
-        if (currentPatience > 0) {
+    void Update()
+    {
+        if (currentPatience > 0)
+        {
             currentPatience -= Time.deltaTime * persona.impatienceMultiplier;
 
-            if (currentPatience <= 0) {
+            if (currentPatience <= 0)
+            {
                 OnPatienceExpired();
             }
         }
     }
 
-    void OnPatienceExpired() {
+    void OnPatienceExpired()
+    {
         ModifySatisfaction(-20);
         beliefs.ModifyState("isFrustrated", 1);
     }
 
-    public ShelfType? GetNextShoppingItem() {
-        if (currentShoppingIndex >= shoppingList.Count) {
+    public ShelfType? GetNextShoppingItem()
+    {
+        if (currentShoppingIndex >= shoppingList.Count)
+        {
             return null;
         }
         return shoppingList[currentShoppingIndex];
     }
 
-    public void CollectItem(Shelf shelf, int count = 1) {
+    public void CollectItem(Shelf shelf, int count = 1)
+    {
         itemsCollected += count;
         itemsInCart += count;
         currentShoppingIndex++;
         totalProfit += shelf.GetProfit(count);
 
-        if (currentShoppingIndex >= shoppingList.Count) {
+        if (currentShoppingIndex >= shoppingList.Count)
+        {
             beliefs.ModifyState("doneShopping", 1);
             beliefs.ModifyState("readyToCheckout", 1);
         }
@@ -132,53 +144,64 @@ public class Customer : GAgent {
         currentShelf = null;
     }
 
-    public void OnItemOutOfStock() {
+    public void OnItemOutOfStock()
+    {
         ModifySatisfaction(-5);
         beliefs.ModifyState("isFrustrated", 1);
         currentShoppingIndex++;
 
-        if (currentShoppingIndex >= shoppingList.Count) {
+        if (currentShoppingIndex >= shoppingList.Count)
+        {
             beliefs.ModifyState("doneShopping", 1);
             beliefs.ModifyState("readyToCheckout", 1);
         }
     }
 
-    public void SetCurrentShelf(Shelf shelf) {
+    public void SetCurrentShelf(Shelf shelf)
+    {
         currentShelf = shelf;
     }
 
-    public Shelf GetCurrentShelf() {
+    public Shelf GetCurrentShelf()
+    {
         return currentShelf;
     }
 
-    public void AssignCart(GameObject cartObj) {
+    public void AssignCart(GameObject cartObj)
+    {
         cart = cartObj;
         beliefs.ModifyState("hasCart", 1);
     }
 
-    public GameObject ReturnCart() {
+    public GameObject ReturnCart()
+    {
         GameObject returnedCart = cart;
         cart = null;
         beliefs.RemoveState("hasCart");
         return returnedCart;
     }
 
-    public void ModifySatisfaction(float amount) {
+    public void ModifySatisfaction(float amount)
+    {
         currentSatisfaction = Mathf.Clamp(currentSatisfaction + amount, 0f, 100f);
     }
 
-    public void CompleteCheckout() {
+    public void CompleteCheckout()
+    {
         beliefs.ModifyState("hasCheckedOut", 1);
 
-        if (currentPatience > persona.basePatience * 0.5f) {
+        if (currentPatience > persona.basePatience * 0.5f)
+        {
             ModifySatisfaction(5);
         }
 
         OnCheckoutComplete?.Invoke(this);
     }
 
-    public void LeaveStore() {
-        if (cart != null) {
+    public void LeaveStore()
+    {
+        if (cart != null)
+        {
             SparkWorld.Instance.GetQueue("carts").AddResource(cart);
             SparkWorld.Instance.GetWorld().ModifyState("FreeCart", 1);
             cart = null;
@@ -188,12 +211,15 @@ public class Customer : GAgent {
         Destroy(gameObject, 0.5f);
     }
 
-    public int GetRemainingItems() {
+    public int GetRemainingItems()
+    {
         return Mathf.Max(0, shoppingList.Count - currentShoppingIndex);
     }
 
-    void OnDrawGizmosSelected() {
-        if (persona != null) {
+    void OnDrawGizmosSelected()
+    {
+        if (persona != null)
+        {
             Gizmos.color = persona.debugColor;
             Gizmos.DrawWireSphere(transform.position, 0.5f);
         }

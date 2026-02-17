@@ -226,8 +226,8 @@ MonoBehaviour:
   actionName: Action
   cost: 1
   target: {fileID: 0}
-  targetTag: CheckoutLane
-  duration: 0
+  targetTag: 
+  duration: 20
   preConditions:
   - key: readyToCheckout
     value: 1
@@ -236,6 +236,7 @@ MonoBehaviour:
     value: 1
   agent: {fileID: 0}
   running: 0
+  maxQueueLength: 4
 --- !u!114 &1393818654082624784
 MonoBehaviour:
   m_ObjectHideFlags: 0

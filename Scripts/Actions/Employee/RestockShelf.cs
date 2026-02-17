@@ -6,57 +6,43 @@ public class RestockShelf : GAction
 
     private Employee employee;
     private Shelf targetShelf;
+    private Transform restockPoint;
 
     void Start()
     {
-        actionName = "RestockShelf";
-
         preconditions.Clear();
-
         effects.Clear();
-        effects.Add("shelvesRestocked", 1);
+        effects["shelvesRestocked"] = 1;
     }
 
     public override bool PrePerform()
     {
         employee = GetComponent<Employee>();
-        if (employee == null)
-        {
-            Debug.Log("[RestockShelf] No Employee component!");
-            return false;
-        }
+        if (employee == null) return false;
 
         if (!employee.assignedToRestock)
         {
-            Debug.Log("[RestockShelf] Employee not assigned to restock");
             return false;
         }
 
         if (employee.IsAtCheckoutLane)
         {
-            Debug.Log("[RestockShelf] Employee is at checkout lane, can't restock");
             return false;
         }
 
         List<Shelf> needsRestock = SparkWorld.Instance.GetShelvesNeedingRestock();
-        Debug.Log($"[RestockShelf] Shelves needing restock: {needsRestock.Count}");
 
         if (needsRestock.Count == 0)
         {
-            Debug.Log("[RestockShelf] No shelves need restocking");
             return false;
         }
 
-        // Find closest shelf that needs restock
+        // Pick the shelf with lowest stock (most urgent)
         targetShelf = needsRestock[0];
-        float closestDist = Vector3.Distance(transform.position, targetShelf.transform.position);
-
         foreach (Shelf shelf in needsRestock)
         {
-            float dist = Vector3.Distance(transform.position, shelf.transform.position);
-            if (dist < closestDist)
+            if (shelf.CurrentStock < targetShelf.CurrentStock)
             {
-                closestDist = dist;
                 targetShelf = shelf;
             }
         }
@@ -64,7 +50,18 @@ public class RestockShelf : GAction
         target = targetShelf.gameObject;
         duration = employee.GetAdjustedDuration(targetShelf.GetRestockDuration());
 
-        Debug.Log($"[RestockShelf] Going to restock {targetShelf.name}");
+        // Use the dedicated RestockPoint so we don't block customer destinations
+        ShelfDestinationManager destManager = targetShelf.GetComponent<ShelfDestinationManager>();
+        if (destManager != null)
+        {
+            restockPoint = destManager.GetRestockPoint();
+        }
+
+        // Fallback: look for a RestockPoint child directly
+        if (restockPoint == null)
+        {
+            restockPoint = targetShelf.transform.Find("RestockPoint");
+        }
 
         return true;
     }
@@ -76,7 +73,20 @@ public class RestockShelf : GAction
             employee.RestockShelf(targetShelf);
         }
 
+        beliefs.ModifyState("shelvesRestocked", 1);
+        beliefs.RemoveState("shelvesRestocked");
+
         targetShelf = null;
+        restockPoint = null;
         return true;
+    }
+
+    /// <summary>
+    /// Returns the restock-specific destination point.
+    /// GAgent will use this instead of the default "Destination" child.
+    /// </summary>
+    public Transform GetRestockDestination()
+    {
+        return restockPoint;
     }
 }

@@ -1,33 +1,33 @@
 using UnityEngine;
 
-public class CustomerGoHome : GAction {
+public class CustomerGoHome : GAction
+{
 
     private Customer customer;
     public string exitTag = "Exit";
 
-    void Start() {
-        actionName = "CustomerGoHome";
-        
-        // Preconditions: has checked out
+    void Start()
+    {
         preconditions.Clear();
-        preconditions.Add("hasCheckedOut", 1);
-        
-        // Effects: left store
         effects.Clear();
-        effects.Add("leftStore", 1);
+        preconditions["hasCheckedOut"] = 1;
+        effects["leftStore"] = 1;
     }
 
-    public override bool PrePerform() {
+    public override bool PrePerform()
+    {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
         GameObject exit = GameObject.FindWithTag(exitTag);
 
-        if (exit == null) {
+        if (exit == null)
+        {
             exit = GameObject.FindWithTag("CustomerSpawn");
         }
 
-        if (exit == null) {
+        if (exit == null)
+        {
             Debug.LogWarning("No exit found!");
             return false;
         }
@@ -36,7 +36,8 @@ public class CustomerGoHome : GAction {
         return true;
     }
 
-    public override bool PostPerform() {
+    public override bool PostPerform()
+    {
         customer.LeaveStore();
         beliefs.ModifyState("leftStore", 1);
         return true;

@@ -64,6 +64,10 @@ public sealed class SparkWorld : MonoBehaviour {
 
     private WorldStates world;
     private Dictionary<string, ResourceQueue> resources = new Dictionary<string, ResourceQueue>();
+    private List<GAgent> registeredAgents = new List<GAgent>();
+    public void RegisterAgent(GAgent agent) { registeredAgents.Add(agent); }
+    public void UnregisterAgent(GAgent agent) { registeredAgents.Remove(agent); }
+    public List<GAgent> GetAllAgents() => registeredAgents;
 
     [Header("Time Settings")]
     [Range(0.1f, 10f)]
