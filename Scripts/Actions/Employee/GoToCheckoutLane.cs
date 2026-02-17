@@ -4,6 +4,17 @@ public class GoToCheckoutLane : GAction {
 
     private Employee employee;
 
+    void Start() {
+        actionName = "GoToCheckoutLane";
+        
+        // No preconditions
+        preconditions.Clear();
+        
+        // Effects: at checkout lane
+        effects.Clear();
+        effects.Add("atCheckoutLane", 1);
+    }
+
     public override bool PrePerform() {
         employee = GetComponent<Employee>();
         if (employee == null) return false;

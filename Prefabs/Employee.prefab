@@ -161,7 +161,7 @@ MonoBehaviour:
   currentAction: {fileID: 0}
   employeeName: Employee
   dailySalary: 100
-  assignedToCheckout: 1
+  assignedToCheckout: 0
   assignedToRestock: 1
   assignedToHelp: 1
   assignedToClean: 1
@@ -190,7 +190,9 @@ MonoBehaviour:
   targetTag: 
   duration: 0
   preConditions: []
-  afterEffects: []
+  afterEffects:
+  - key: atCheckoutLane
+    value: 0
   agent: {fileID: 0}
   running: 0
 --- !u!114 &-1261134751728993
@@ -210,8 +212,12 @@ MonoBehaviour:
   target: {fileID: 0}
   targetTag: 
   duration: 0
-  preConditions: []
-  afterEffects: []
+  preConditions:
+  - key: atCheckoutLane
+    value: 1
+  afterEffects:
+  - key: operatingCheckout
+    value: 1
   agent: {fileID: 0}
   running: 0
   baseProcessTime: 3
@@ -234,7 +240,9 @@ MonoBehaviour:
   targetTag: 
   duration: 0
   preConditions: []
-  afterEffects: []
+  afterEffects:
+  - key: shelvesRestocked
+    value: 1
   agent: {fileID: 0}
   running: 0
 --- !u!114 &7449578085212727489
@@ -254,7 +262,11 @@ MonoBehaviour:
   target: {fileID: 0}
   targetTag: 
   duration: 0
-  preConditions: []
-  afterEffects: []
+  preConditions:
+  - key: needsBreak
+    value: 1
+  afterEffects:
+  - key: rested
+    value: 1
   agent: {fileID: 0}
   running: 0

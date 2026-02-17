@@ -7,6 +7,18 @@ public class OperateCheckout : GAction {
     public float baseProcessTime = 3f;
     public float timePerItem = 0.5f;
 
+    void Start() {
+        actionName = "OperateCheckout";
+        
+        // Preconditions: must be at checkout lane
+        preconditions.Clear();
+        preconditions.Add("atCheckoutLane", 1);
+        
+        // Effects: operating checkout (continuous goal)
+        effects.Clear();
+        effects.Add("operatingCheckout", 1);
+    }
+
     public override bool PrePerform() {
         employee = GetComponent<Employee>();
         if (employee == null) return false;
@@ -17,20 +29,27 @@ public class OperateCheckout : GAction {
 
         ResourceQueue customerQueue = SparkWorld.Instance.GetQueue("customersInCheckoutQueue");
         if (customerQueue == null || customerQueue.Count == 0) {
-            return false;
+            // No customers - just wait at checkout
+            target = employee.AssignedCheckoutLane;
+            duration = 1f; // Check again in 1 second
+            return true;
         }
 
         GameObject customerObj = customerQueue.RemoveResource();
         if (customerObj == null) {
-            return false;
+            target = employee.AssignedCheckoutLane;
+            duration = 1f;
+            return true;
         }
 
         currentCustomer = customerObj.GetComponent<Customer>();
         if (currentCustomer == null) {
-            return false;
+            target = employee.AssignedCheckoutLane;
+            duration = 1f;
+            return true;
         }
 
-        target = customerObj;
+        target = employee.AssignedCheckoutLane;
 
         float processTime = baseProcessTime + (currentCustomer.ItemsInCart * timePerItem);
         duration = employee.GetAdjustedDuration(processTime);
@@ -42,9 +61,6 @@ public class OperateCheckout : GAction {
         if (currentCustomer != null) {
             currentCustomer.CompleteCheckout();
         }
-
-        beliefs.ModifyState("operatingCheckout", 1);
-        beliefs.RemoveState("operatingCheckout");
 
         currentCustomer = null;
         return true;

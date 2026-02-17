@@ -4,6 +4,18 @@ public class TakeBreak : GAction {
 
     private Employee employee;
 
+    void Start() {
+        actionName = "TakeBreak";
+        
+        // Preconditions: needs break
+        preconditions.Clear();
+        preconditions.Add("needsBreak", 1);
+        
+        // Effects: rested
+        effects.Clear();
+        effects.Add("rested", 1);
+    }
+
     public override bool PrePerform() {
         employee = GetComponent<Employee>();
         if (employee == null) return false;
@@ -33,9 +45,7 @@ public class TakeBreak : GAction {
 
         employee.FinishBreak();
 
-        beliefs.ModifyState("rested", 1);
         beliefs.RemoveState("needsBreak");
-        beliefs.RemoveState("rested");
 
         return true;
     }

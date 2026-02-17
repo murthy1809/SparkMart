@@ -20,11 +20,6 @@ public class GoToCheckout : GAction {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
-        // For testing without employees, skip the staffed check
-        // if (!SparkWorld.Instance.GetWorld().HasState("StaffedCheckoutLane")) {
-        //     return false;
-        // }
-
         GameObject[] checkoutLanes = GameObject.FindGameObjectsWithTag("CheckoutLane");
         
         if (checkoutLanes.Length == 0) {
@@ -32,8 +27,19 @@ public class GoToCheckout : GAction {
             return false;
         }
 
-        // Just go to first checkout lane for now
-        target = checkoutLanes[1];
+        // Find closest checkout lane
+        GameObject closestLane = checkoutLanes[0];
+        float closestDist = Vector3.Distance(transform.position, closestLane.transform.position);
+        
+        foreach (GameObject lane in checkoutLanes) {
+            float dist = Vector3.Distance(transform.position, lane.transform.position);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestLane = lane;
+            }
+        }
+
+        target = closestLane;
         SparkWorld.Instance.GetQueue("customersInCheckoutQueue").AddResource(gameObject);
 
         return true;
