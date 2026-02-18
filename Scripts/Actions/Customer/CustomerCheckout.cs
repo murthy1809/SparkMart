@@ -20,6 +20,17 @@ public class CustomerCheckout : GAction
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
+        // Use the checkout lane the customer is queued at
+        GoToCheckout goToCheckout = GetComponent<GoToCheckout>();
+        if (goToCheckout != null && goToCheckout.GetAssignedQueue() != null)
+        {
+            target = goToCheckout.GetAssignedQueue().gameObject;
+        }
+        else
+        {
+            target = gameObject; // fallback: self
+        }
+
         duration = baseCheckoutTime + (customer.ItemsInCart * timePerItem);
         return true;
     }
