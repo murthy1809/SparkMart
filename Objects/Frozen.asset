@@ -17,7 +17,7 @@ MonoBehaviour:
   minStock: 20
   maxStock: 40
   restockThreshold: 20
-  initialStock: 100
+  initialStock: 20
   profitPerItem: 8
   theftRisk: 0.1
   restockDuration: 10
