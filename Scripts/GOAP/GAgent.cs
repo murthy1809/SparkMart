@@ -78,6 +78,8 @@ public class GAgent : MonoBehaviour
             replanCooldown = 5f;
 
             planner = new GPlanner();
+          //  planner = new GPlanner();
+            Debug.Log($"[{gameObject.name}] Replanning. Beliefs: {string.Join(", ", beliefs.GetStates().Keys)}");
 
             var sortedGoals = from entry in goals orderby entry.Value descending select entry;
 
@@ -86,8 +88,13 @@ public class GAgent : MonoBehaviour
                 actionQueue = planner.Plan(actions, sg.Key.sGoals, beliefs);
                 if (actionQueue != null)
                 {
+                    //Debug.Log($"[{gameObject.name}] Plan found for goal: {string.Join(", ", sg.Key.sGoals.Keys)} with {actionQueue.Count} actions");
                     currentGoal = sg.Key;
                     break;
+                }
+                else
+                {
+                    //Debug.Log($"[{gameObject.name}] Plan FAILED for goal: {string.Join(", ", sg.Key.sGoals.Keys)}");
                 }
             }
         }
@@ -96,7 +103,20 @@ public class GAgent : MonoBehaviour
         {
             if (currentGoal.remove)
             {
-                goals.Remove(currentGoal);
+                // Only remove goal if it's actually achieved in beliefs
+                bool goalAchieved = true;
+                foreach (var g in currentGoal.sGoals)
+                {
+                    if (!beliefs.HasState(g.Key))
+                    {
+                        goalAchieved = false;
+                        break;
+                    }
+                }
+                if (goalAchieved)
+                {
+                    goals.Remove(currentGoal);
+                }
             }
             planner = null;
         }
@@ -104,8 +124,12 @@ public class GAgent : MonoBehaviour
         if (actionQueue != null && actionQueue.Count > 0)
         {
             currentAction = actionQueue.Dequeue();
+            Debug.Log($"[{gameObject.name}] Executing action: {currentAction.actionName}, PrePerform result: ...");
 
-            if (currentAction.PrePerform())
+            bool preResult = currentAction.PrePerform();
+           // Debug.Log($"[{gameObject.name}] Action: {currentAction.actionName}, PrePerform: {preResult}, Target: {currentAction.target?.name ?? "NULL"}");
+                //if (currentAction.PrePerform())
+            if (preResult)            
             {
                 if (currentAction.target == null && currentAction.targetTag != "")
                 {
@@ -157,6 +181,7 @@ public class GAgent : MonoBehaviour
                     }
 
                     currentAction.agent.SetDestination(destination);
+                    return;
                 }
             }
             else

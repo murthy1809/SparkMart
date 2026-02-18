@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: -1261134751728993}
   - component: {fileID: -6798807965283492411}
   - component: {fileID: 7449578085212727489}
+  - component: {fileID: 92313547945012795}
+  - component: {fileID: 2956110411653055970}
   m_Layer: 0
   m_Name: Employee
   m_TagString: Untagged
@@ -165,13 +167,15 @@ MonoBehaviour:
   assignedToRestock: 1
   assignedToHelp: 1
   assignedToClean: 1
-  breakInterval: 300
-  breakDuration: 30
+  breakInterval: 30
+  breakDuration: 5
   isTired: 0
   efficiency: 1
   tiredEfficiencyMultiplier: 0.7
   isOnBreak: 0
   isAtCheckoutLane: 0
+  maxCarryCapacity: 20
+  currentCarrying: 0
 --- !u!114 &726071562666103923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,5 +272,47 @@ MonoBehaviour:
   afterEffects:
   - key: rested
     value: 1
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &92313547945012795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 236ad9ebf8d380d4ea716cbba5e290a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToWarehouse
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions: []
+  afterEffects: []
+  agent: {fileID: 0}
+  running: 0
+--- !u!114 &2956110411653055970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f4f2966c4943f479495735c8252c10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EmployeePatrol
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions: []
+  afterEffects: []
   agent: {fileID: 0}
   running: 0

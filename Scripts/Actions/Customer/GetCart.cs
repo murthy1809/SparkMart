@@ -4,11 +4,11 @@ public class GetCart : GAction
 {
 
     private Customer customer;
-
     void Start()
     {
         preconditions.Clear();
         effects.Clear();
+        preconditions["inStore"] = 1;
         effects["hasCart"] = 1;
     }
 

@@ -16,6 +16,11 @@ MonoBehaviour:
   personaType: 0
   debugColor: {r: 0, g: 0, b: 1, a: 1}
   spawnWeight: 25
+  weightGeneral: 30
+  weightProduce: 25
+  weightFrozen: 15
+  weightElectronics: 15
+  weightClothing: 15
   minShoppingListSize: 1
   maxShoppingListSize: 5
   requiresCart: 0

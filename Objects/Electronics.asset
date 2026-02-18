@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4261b9ce832393d44a2df729a78452f7, type: 3}
-  m_Name: GeneralShelf
+  m_Name: Electronics
   m_EditorClassIdentifier: Assembly-CSharp::ShelfData
-  shelfName: General Shelf
-  shelfType: 0
+  shelfName: Electronics
+  shelfType: 3
   minStock: 20
   maxStock: 40
   restockThreshold: 20

@@ -48,16 +48,16 @@ public class GPlanner {
         }
 
         // DEBUG
-        Debug.Log($"=== PLANNING ===");
-        Debug.Log($"Goal: {string.Join(", ", goal.Keys)}");
-        Debug.Log($"Available actions: {usableActions.Count}");
-        foreach (GAction a in usableActions) {
-            Debug.Log($"  - {a.actionName}: preconditions={a.preconditions.Count}, effects={a.effects.Count}");
-            foreach (var p in a.preconditions) Debug.Log($"      PRE: {p.Key}={p.Value}");
-            foreach (var e in a.effects) Debug.Log($"      EFF: {e.Key}={e.Value}");
-        }
-        Debug.Log($"World states: {string.Join(", ", SparkWorld.Instance.GetWorld().GetStates().Keys)}");
-        Debug.Log($"Belief states: {string.Join(", ", beliefStates.GetStates().Keys)}");
+        //Debug.Log($"=== PLANNING ===");
+        //Debug.Log($"Goal: {string.Join(", ", goal.Keys)}");
+        //Debug.Log($"Available actions: {usableActions.Count}");
+        //foreach (GAction a in usableActions) {
+        //    Debug.Log($"  - {a.actionName}: preconditions={a.preconditions.Count}, effects={a.effects.Count}");
+        //    foreach (var p in a.preconditions) Debug.Log($"      PRE: {p.Key}={p.Value}");
+        //    foreach (var e in a.effects) Debug.Log($"      EFF: {e.Key}={e.Value}");
+        //}
+        //Debug.Log($"World states: {string.Join(", ", SparkWorld.Instance.GetWorld().GetStates().Keys)}");
+        //Debug.Log($"Belief states: {string.Join(", ", beliefStates.GetStates().Keys)}");
 
         List<Node> leaves = new List<Node>();
         Node start = new Node(null, 0.0f, SparkWorld.Instance.GetWorld().GetStates(), beliefStates.GetStates(), null);

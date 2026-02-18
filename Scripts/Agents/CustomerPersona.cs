@@ -18,6 +18,36 @@ public class CustomerPersona : ScriptableObject {
     [Header("Spawn")]
     [Range(0, 100)] public int spawnWeight = 25;
 
+    [Header("Shopping Preferences")]
+    [Range(0, 100)] public int weightGeneral = 30;
+    [Range(0, 100)] public int weightProduce = 25;
+    [Range(0, 100)] public int weightFrozen = 15;
+    [Range(0, 100)] public int weightElectronics = 15;
+    [Range(0, 100)] public int weightClothing = 15;
+
+    public ShelfType GetWeightedRandomShelfType()
+    {
+        int total = weightGeneral + weightProduce + weightFrozen + weightElectronics + weightClothing;
+        if (total <= 0) return ShelfType.General;
+
+        int roll = Random.Range(0, total);
+        int cumulative = 0;
+
+        cumulative += weightGeneral;
+        if (roll < cumulative) return ShelfType.General;
+
+        cumulative += weightProduce;
+        if (roll < cumulative) return ShelfType.Produce;
+
+        cumulative += weightFrozen;
+        if (roll < cumulative) return ShelfType.Frozen;
+
+        cumulative += weightElectronics;
+        if (roll < cumulative) return ShelfType.Electronics;
+
+        return ShelfType.Clothing;
+    }
+
     [Header("Shopping")]
     [Range(0, 20)] public int minShoppingListSize = 1;
     [Range(0, 20)] public int maxShoppingListSize = 3;

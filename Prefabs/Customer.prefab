@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2299574628946620700}
   - component: {fileID: 1393818654082624784}
   - component: {fileID: 7708297411552352358}
+  - component: {fileID: 632849785123159514}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -163,6 +164,14 @@ MonoBehaviour:
   currentSatisfaction: 0
   currentPatience: 0
   totalProfit: 0
+  generalCount: 0
+  produceCount: 0
+  frozenCount: 0
+  electronicsCount: 0
+  clothingCount: 0
+  itemsBought: 
+  itemsMissed: 
+  shoppingList: 
 --- !u!114 &767663508818487422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +236,7 @@ MonoBehaviour:
   cost: 1
   target: {fileID: 0}
   targetTag: 
-  duration: 20
+  duration: 0
   preConditions:
   - key: readyToCheckout
     value: 1
@@ -262,7 +271,7 @@ MonoBehaviour:
     value: 1
   agent: {fileID: 0}
   running: 0
-  baseCheckoutTime: 5
+  baseCheckoutTime: 2
   timePerItem: 1
 --- !u!114 &7708297411552352358
 MonoBehaviour:
@@ -290,3 +299,24 @@ MonoBehaviour:
   agent: {fileID: 0}
   running: 0
   exitTag: Exit
+--- !u!114 &632849785123159514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002928554692032241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f8f96ed84e9f6248bfca4d7dde9e50e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToStore
+  actionName: Action
+  cost: 1
+  target: {fileID: 0}
+  targetTag: 
+  duration: 0
+  preConditions: []
+  afterEffects: []
+  agent: {fileID: 0}
+  running: 0

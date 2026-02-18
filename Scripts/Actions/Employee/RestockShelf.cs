@@ -10,8 +10,10 @@ public class RestockShelf : GAction
 
     void Start()
     {
+        actionName = "RestockShelf";
         preconditions.Clear();
         effects.Clear();
+        preconditions["hasStock"] = 1;
         effects["shelvesRestocked"] = 1;
     }
 
@@ -68,13 +70,15 @@ public class RestockShelf : GAction
 
     public override bool PostPerform()
     {
-        if (targetShelf != null)
+        if (targetShelf != null && employee.HasStock)
         {
-            employee.RestockShelf(targetShelf);
+            int delivered = employee.DeliverStock();
+            targetShelf.AddItems(delivered);
         }
 
         beliefs.ModifyState("shelvesRestocked", 1);
         beliefs.RemoveState("shelvesRestocked");
+        beliefs.RemoveState("hasStock");
 
         targetShelf = null;
         restockPoint = null;

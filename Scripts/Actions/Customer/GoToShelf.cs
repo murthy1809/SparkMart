@@ -12,6 +12,7 @@ public class GoToShelf : GAction
     {
         preconditions.Clear();
         effects.Clear();
+        preconditions["inStore"] = 1;
         effects["atShelf"] = 1;
     }
 
@@ -19,6 +20,7 @@ public class GoToShelf : GAction
     {
         customer = GetComponent<Customer>();
         if (customer == null) return false;
+        Debug.Log($"[{gameObject.name}] GoToShelf: remaining items={customer.GetRemainingItems()}, nextItem={customer.GetNextShoppingItem()}");
 
         if (customer.Persona.requiresCart && !customer.HasCart)
         {

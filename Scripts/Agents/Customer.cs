@@ -15,7 +15,17 @@ public class Customer : GAgent
     [SerializeField] private float currentPatience;
     [SerializeField] private float totalProfit;
 
-    private List<ShelfType> shoppingList = new List<ShelfType>();
+    [Header("Shopping List Breakdown")]
+    [SerializeField] private int generalCount;
+    [SerializeField] private int produceCount;
+    [SerializeField] private int frozenCount;
+    [SerializeField] private int electronicsCount;
+    [SerializeField] private int clothingCount;
+    [Header("Shopping Progress")]
+    [SerializeField] private List<ShelfType> itemsBought = new List<ShelfType>();
+    [SerializeField] private List<ShelfType> itemsMissed = new List<ShelfType>();
+
+    [SerializeField] private List<ShelfType> shoppingList = new List<ShelfType>();
     private int currentShoppingIndex = 0;
     private GameObject cart;
     private Shelf currentShelf;
@@ -67,8 +77,7 @@ public class Customer : GAgent
 
         for (int i = 0; i < shoppingListSize; i++)
         {
-            ShelfType type = (ShelfType)Random.Range(0, System.Enum.GetValues(typeof(ShelfType)).Length);
-            shoppingList.Add(type);
+            shoppingList.Add(persona.GetWeightedRandomShelfType());
         }
 
         if (persona.browsesBehavior && shoppingListSize == 0)
@@ -76,10 +85,16 @@ public class Customer : GAgent
             int browseItems = Random.Range(1, 4);
             for (int i = 0; i < browseItems; i++)
             {
-                ShelfType type = (ShelfType)Random.Range(0, System.Enum.GetValues(typeof(ShelfType)).Length);
-                shoppingList.Add(type);
+                shoppingList.Add(persona.GetWeightedRandomShelfType());
             }
         }
+        // Update debug counts
+        generalCount = shoppingList.FindAll(t => t == ShelfType.General).Count;
+        produceCount = shoppingList.FindAll(t => t == ShelfType.Produce).Count;
+        frozenCount = shoppingList.FindAll(t => t == ShelfType.Frozen).Count;
+        electronicsCount = shoppingList.FindAll(t => t == ShelfType.Electronics).Count;
+        clothingCount = shoppingList.FindAll(t => t == ShelfType.Clothing).Count;
+
     }
 
     void SetupGoals()
@@ -133,6 +148,7 @@ public class Customer : GAgent
         itemsCollected += count;
         itemsInCart += count;
         currentShoppingIndex++;
+        itemsBought.Add(shoppingList[currentShoppingIndex - 1]);
         totalProfit += shelf.GetProfit(count);
 
         if (currentShoppingIndex >= shoppingList.Count)
@@ -149,6 +165,7 @@ public class Customer : GAgent
         ModifySatisfaction(-5);
         beliefs.ModifyState("isFrustrated", 1);
         currentShoppingIndex++;
+        itemsMissed.Add(shoppingList[currentShoppingIndex - 1]);
 
         if (currentShoppingIndex >= shoppingList.Count)
         {

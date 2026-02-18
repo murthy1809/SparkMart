@@ -26,7 +26,25 @@ public class Employee : GAgent {
     [SerializeField] private bool isOnBreak = false;
     [SerializeField] private bool isAtCheckoutLane = false;
     private GameObject assignedCheckoutLane;
+    [Header("Carry Capacity")]
+    public int maxCarryCapacity = 20;
+    [SerializeField] private int currentCarrying = 0;
 
+    public int CurrentCarrying => currentCarrying;
+
+    public void PickUpStock(int amount)
+    {
+        currentCarrying = Mathf.Min(amount, maxCarryCapacity);
+    }
+
+    public int DeliverStock()
+    {
+        int delivered = currentCarrying;
+        currentCarrying = 0;
+        return delivered;
+    }
+
+    public bool HasStock => currentCarrying > 0;
     public bool IsTired => isTired;
     public float Efficiency => efficiency;
     public bool IsOnBreak => isOnBreak;
@@ -44,9 +62,11 @@ public class Employee : GAgent {
     }
 
     void SetupGoals() {
+        Debug.Log($"[{employeeName}] Setting up goals. Restock assigned: {assignedToRestock}, Checkout assigned: {assignedToCheckout}");
         SubGoal breakGoal = new SubGoal("rested", 1, false);
         goals.Add(breakGoal, 5);
-
+        SubGoal patrolGoal = new SubGoal("patrolled", 1, false);
+        goals.Add(patrolGoal, 1);
         if (assignedToCheckout) {
             SubGoal checkoutGoal = new SubGoal("operatingCheckout", 1, false);
             goals.Add(checkoutGoal, 3);
@@ -72,9 +92,9 @@ public class Employee : GAgent {
         if (!isOnBreak) {
             timeSinceLastBreak += Time.deltaTime;
 
-            if (timeSinceLastBreak >= breakInterval) {
-                NeedsBreak();
-            }
+if (timeSinceLastBreak >= breakInterval && !beliefs.HasState("needsBreak")) {
+    NeedsBreak();
+}
         }
     }
 
