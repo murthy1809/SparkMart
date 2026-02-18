@@ -126,15 +126,22 @@ public class CheckoutQueueManager : MonoBehaviour {
     /// Tells all queued customers to move to their updated positions.
     /// Called after someone leaves the queue.
     /// </summary>
-    private void ShuffleForward() {
-        for (int i = 0; i < queuedCustomers.Count; i++) {
+    private void ShuffleForward()
+    {
+        for (int i = 0; i < queuedCustomers.Count; i++)
+        {
             GameObject customer = queuedCustomers[i];
             if (customer == null) continue;
 
-            // Update the customer's NavMeshAgent destination
-            UnityEngine.AI.NavMeshAgent agent = customer.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            if (agent != null && agent.isActiveAndEnabled) {
-                agent.SetDestination(GetPositionForIndex(i));
+            // Only redirect customers who are still in the checkout queue
+            GAgent agent = customer.GetComponent<GAgent>();
+            if (agent != null && agent.currentAction is CustomerCheckout) continue;
+            if (agent != null && agent.currentAction is CustomerGoHome) continue;
+
+            UnityEngine.AI.NavMeshAgent navAgent = customer.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            if (navAgent != null && navAgent.isActiveAndEnabled)
+            {
+                navAgent.SetDestination(GetPositionForIndex(i));
             }
         }
     }
