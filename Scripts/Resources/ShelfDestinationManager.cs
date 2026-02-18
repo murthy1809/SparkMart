@@ -166,7 +166,24 @@ public class ShelfDestinationManager : MonoBehaviour
         }
         return restockPoint;
     }
+    private GameObject restockOccupant = null;
 
+    public bool IsRestockOccupied()
+    {
+        return restockOccupant != null;
+    }
+
+    public bool ClaimRestockPoint(GameObject employee)
+    {
+        if (restockOccupant != null) return false;
+        restockOccupant = employee;
+        return true;
+    }
+
+    public void ReleaseRestockPoint()
+    {
+        restockOccupant = null;
+    }
     void OnDrawGizmosSelected()
     {
         foreach (var spot in spots)

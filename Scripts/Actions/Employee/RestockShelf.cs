@@ -39,24 +39,35 @@ public class RestockShelf : GAction
             return false;
         }
 
-        // Pick the shelf with lowest stock (most urgent)
-        targetShelf = needsRestock[0];
+        // Pick the lowest stock shelf that isn't already being restocked
+        targetShelf = null;
         foreach (Shelf shelf in needsRestock)
         {
-            if (shelf.CurrentStock < targetShelf.CurrentStock)
+            ShelfDestinationManager destManager = shelf.GetComponent<ShelfDestinationManager>();
+            if (destManager != null && destManager.IsRestockOccupied()) continue;
+
+            if (targetShelf == null || shelf.CurrentStock < targetShelf.CurrentStock)
             {
                 targetShelf = shelf;
             }
+        }
+
+        if (targetShelf == null) return false;
+
+        // Claim the restock point
+        ShelfDestinationManager manager = targetShelf.GetComponent<ShelfDestinationManager>();
+        if (manager != null && !manager.ClaimRestockPoint(gameObject))
+        {
+            return false;
         }
 
         target = targetShelf.gameObject;
         duration = employee.GetAdjustedDuration(targetShelf.GetRestockDuration());
 
         // Use the dedicated RestockPoint so we don't block customer destinations
-        ShelfDestinationManager destManager = targetShelf.GetComponent<ShelfDestinationManager>();
-        if (destManager != null)
+        if (manager != null)
         {
-            restockPoint = destManager.GetRestockPoint();
+            restockPoint = manager.GetRestockPoint();
         }
 
         // Fallback: look for a RestockPoint child directly
@@ -70,6 +81,16 @@ public class RestockShelf : GAction
 
     public override bool PostPerform()
     {
+        // Release restock point
+        if (targetShelf != null)
+        {
+            ShelfDestinationManager manager = targetShelf.GetComponent<ShelfDestinationManager>();
+            if (manager != null)
+            {
+                manager.ReleaseRestockPoint();
+            }
+        }
+
         if (targetShelf != null && employee.HasStock)
         {
             int delivered = employee.DeliverStock();
@@ -85,10 +106,6 @@ public class RestockShelf : GAction
         return true;
     }
 
-    /// <summary>
-    /// Returns the restock-specific destination point.
-    /// GAgent will use this instead of the default "Destination" child.
-    /// </summary>
     public Transform GetRestockDestination()
     {
         return restockPoint;

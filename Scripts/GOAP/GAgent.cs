@@ -75,7 +75,7 @@ public class GAgent : MonoBehaviour
         {
             replanCooldown -= Time.deltaTime;
             if (replanCooldown > 0f) return;
-            replanCooldown = 5f;
+            replanCooldown = 1f;
 
             planner = new GPlanner();
           //  planner = new GPlanner();
