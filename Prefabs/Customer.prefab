@@ -271,7 +271,7 @@ MonoBehaviour:
     value: 1
   agent: {fileID: 0}
   running: 0
-  baseCheckoutTime: 2
+  baseCheckoutTime: 0
   timePerItem: 1
 --- !u!114 &7708297411552352358
 MonoBehaviour:

@@ -20,15 +20,27 @@ public class CustomerCheckout : GAction
         customer = GetComponent<Customer>();
         if (customer == null) return false;
 
-        // Use the checkout lane the customer is queued at
+        // Only checkout if first in line
         GoToCheckout goToCheckout = GetComponent<GoToCheckout>();
-        if (goToCheckout != null && goToCheckout.GetAssignedQueue() != null)
+        if (goToCheckout != null)
         {
-            target = goToCheckout.GetAssignedQueue().gameObject;
+            CheckoutQueueManager queue = goToCheckout.GetAssignedQueue();
+            if (queue != null)
+            {
+                if (!queue.IsFirstInLine(gameObject))
+                {
+                    return false;
+                }
+                target = queue.gameObject;
+            }
+            else
+            {
+                target = gameObject;
+            }
         }
         else
         {
-            target = gameObject; // fallback: self
+            target = gameObject;
         }
 
         duration = baseCheckoutTime + (customer.ItemsInCart * timePerItem);
